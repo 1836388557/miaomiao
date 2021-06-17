@@ -1,7 +1,14 @@
 <template>
   <div>
     <div class="cinema_body">
-      <ul>
+      <div
+        class="cinema-list"
+        data-cid="c_5ovvtlp2"
+        style="margin-bottom: 55px;"
+      >
+        <div class="list-wrap" style="margin-top: 0px; min-height: 627px" v-html="cityInfo"></div>
+      </div>
+      <!-- <ul>
         <li>
           <div>
             <span>大地影院(澳东世纪店)</span>
@@ -16,66 +23,36 @@
             <div>折扣卡</div>
           </div>
         </li>
-      </ul>
+      </ul> -->
     </div>
   </div>
 </template>
 
 <script>
+// /ajax/moreCinemas?day=2021-06-17&offset=0&limit=20&districtId=-1&lineId=-1&hallType=-1&brandId=-1&serviceId=-1&areaId=-1&stationId=-1&item=&updateShowDay=true&reqId=1623936381709&cityId=10&optimus_uuid=9AB21B50C39111EB9BD35FB66045BAEE2943D17686244A79A25B62905721C15D&optimus_risk_level=71&optimus_code=10
 export default {
   name: 'CiList',
-  methods: {}
+  data () {
+    return {
+      cityInfo: null
+    }
+  },
+  methods: {},
+  mounted () {
+    this.axios({
+      type: 'get',
+      url: '/ajax/moreCinemas?cityId=10'
+    }).then((res) => {
+      // console.log(res.data)
+      this.cityInfo = res.data
+    })
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-#content .cinema_body {
+.cinema_body {
   flex: 1;
   overflow: auto;
-}
-.cinema_body ul {
-  padding: 20px;
-}
-.cinema_body li {
-  border-bottom: 1px solid #e6e6e6;
-  margin-bottom: 20px;
-}
-.cinema_body div {
-  margin-bottom: 10px;
-}
-.cinema_body .q {
-  font-size: 11px;
-  color: #f03d37;
-}
-.cinema_body .price {
-  font-size: 18px;
-}
-.cinema_body .address {
-  font-size: 13px;
-  color: #666;
-}
-.cinema_body .address span:nth-of-type(2) {
-  float: right;
-}
-.cinema_body .card {
-  display: flex;
-}
-.cinema_body .card div {
-  padding: 0 3px;
-  height: 15px;
-  line-height: 15px;
-  border-radius: 2px;
-  color: #f90;
-  border: 1px solid #f90;
-  font-size: 13px;
-  margin-right: 5px;
-}
-.cinema_body .card div.or {
-  color: #f90;
-  border: 1px solid #f90;
-}
-.cinema_body .card div.bl {
-  color: #589daf;
-  border: 1px solid #589daf;
 }
 </style>

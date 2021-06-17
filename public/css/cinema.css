@@ -1,0 +1,141 @@
+.cinema-list .list-wrap {
+  background-color: #fff;
+  
+}
+.cinema-list .list-wrap a {
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  display: block;
+  background-color: transparent;
+}
+.cinema-list .list-wrap .item {
+  padding: 13px 15px 13px 0;
+  margin-left: 15px;
+  background-color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.cinema-list .list-wrap .title-block {
+  display: block;
+}
+.cinema-list .list-wrap .title-block .title {
+  height: 23px;
+  line-height: 23px;
+  font-size: 16px;
+  color: #000;
+}
+.line-ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.cinema-list .list-wrap .price-block {
+  padding-top: 9px;
+  padding-left: 3px;
+}
+.cinema-list .location-block, .cinema-list .price-block, .cinema-list .title-block {
+  line-height: 1.5;
+}
+.cinema-list .list-wrap .price-block .price {
+  font-size: 18px;
+}
+.cinema-list .list-wrap .price-block .d, .cinema-list .list-wrap .price-block .price, .cinema-list .list-wrap .price-block .q {
+  font-size: 11px;
+  color: #f03d37;
+}
+.cinema-list .list-wrap .price-block .q {
+  margin-left: 3px;
+}
+.cinema-list .list-wrap .price-block .d, .cinema-list .list-wrap .price-block .price, .cinema-list .list-wrap .price-block .q {
+  font-size: 11px;
+  color: #f03d37;
+}
+.cinema-list .list-wrap .location-block {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #666;
+}
+.flex {
+  -webkit-box-flex: 1;
+  flex: 1;
+}
+.cinema-list .list-wrap .location-block {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #666;
+}
+.cinema-list .list-wrap .location-block .distance, .cinema-list .list-wrap .location-block .region {
+  margin-left: 5px;
+}
+.cinema-list .list-wrap .title-block .label-block {
+  height: 17px;
+  line-height: 17px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  overflow: hidden;
+  font-size: 0;
+  flex-shrink: 0;
+}
+.cinema-list .discount-block {
+  color: #999;
+  margin-bottom: 4px;
+}
+.cinema-list .discount-block .discount-label {
+  width: 15px;
+  height: 14px;
+  position: relative;
+  top: 3px;
+}
+img {
+  width: 100%;
+}
+a, img {
+  display: block;
+}
+img {
+  border: 0;
+}
+.cinema-list .discount-block .discount-label-text {
+  margin-left: 0;
+  font-size: 11px;
+}
+.cinema-list .list-wrap .title-block .label-block>div {
+  position: relative;
+  display: inline-block;
+  padding: 0 3px;
+  height: 15px;
+  line-height: 15px;
+  border-radius: 2px;
+  font-size: .6rem;
+}
+.cinema-list .list-wrap .title-block .label-block div.allowRefund, .cinema-list .list-wrap .title-block .label-block div.endorse, .cinema-list .list-wrap .title-block .label-block div.hallType, .cinema-list .list-wrap .title-block .label-block div.sell {
+  color: #589daf;
+  border: 1px solid #589daf;
+}
+.cinema-list .list-wrap .title-block .label-block>div+div {
+  margin-left: 5px;
+}
+.cinema-list .list-wrap .title-block .label-block div.snack, .cinema-list .list-wrap .title-block .label-block div.vipTag {
+  color: #f90;
+  border: 1px solid #f90;
+}
+.cinema-list .list-wrap .title-block .label-block>div+div {
+  margin-left: 5px;
+}
+.discount-label {
+  display: -webkit-inline-box;
+  display: inline-flex;
+}
+.discount-label-text {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 13px;
+}
+.box-flex {
+  display: -webkit-box;
+  display: flex;
+}
+.cinema-list .list-wrap .price-block .price {
+  font-size: 18px;
+}

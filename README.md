@@ -60,3 +60,9 @@ $ git merge createComponents --no-ff
 
 查看日志
 $ git log
+
+查看分支
+$ git branch
+
+删除分支
+$ git branch -D createComponents

@@ -16,100 +16,16 @@
     </ul>
   </div> -->
   <div class="movie_body">
-    <ul>
-      <li>
-        <div class="pic_show"><img src="/images/movie_2.jpg" alt="" /></div>
+    <ul v-if="datalist">
+      <li v-for="data in datalist.movieList" :key="data.id">
+        <div class="pic_show"><img :src="data.img" alt="" /></div>
         <div class="info_list">
-          <h2>毒液：致命守护者</h2>
+          <h2>{{ data.nm }}<img v-if="data.version" src="@/assets/maxs.png"></h2>
           <p>
-            观众评<span class="grade">9.3</span>
+            观众评<span class="grade">{{ data.sc }}</span>
           </p>
-          <p>主演：汤姆·哈迪，米歇尔·威廉姆斯，里兹·阿迈德</p>
-          <p>今天56家电影院放映443场</p>
-        </div>
-        <div class="btn_mall">购票</div>
-      </li>
-      <li>
-        <div class="pic_show"><img src="/images/movie_1.jpg" alt="" /></div>
-        <div class="info_list">
-          <h2>无名之辈</h2>
-          <p>
-            观众评<span class="grade">9.2</span>
-          </p>
-          <p>主演：陈建斌，任素汐，潘斌龙</p>
-          <p>今天55家电影院放映667场</p>
-        </div>
-        <div class="btn_mall">购票</div>
-      </li>
-      <li>
-        <div class="pic_show"><img src="/images/movie_2.jpg" alt="" /></div>
-        <div class="info_list">
-          <h2>毒液：致命守护者</h2>
-          <p>
-            观众评<span class="grade">9.3</span>
-          </p>
-          <p>主演：汤姆·哈迪，米歇尔·威廉姆斯，里兹·阿迈德</p>
-          <p>今天56家电影院放映443场</p>
-        </div>
-        <div class="btn_mall">购票</div>
-      </li>
-      <li>
-        <div class="pic_show"><img src="/images/movie_1.jpg" alt="" /></div>
-        <div class="info_list">
-          <h2>无名之辈</h2>
-          <p>
-            观众评<span class="grade">9.2</span>
-          </p>
-          <p>主演：陈建斌，任素汐，潘斌龙</p>
-          <p>今天55家电影院放映667场</p>
-        </div>
-        <div class="btn_mall">购票</div>
-      </li>
-      <li>
-        <div class="pic_show"><img src="/images/movie_2.jpg" alt="" /></div>
-        <div class="info_list">
-          <h2>毒液：致命守护者</h2>
-          <p>
-            观众评<span class="grade">9.3</span>
-          </p>
-          <p>主演：汤姆·哈迪，米歇尔·威廉姆斯，里兹·阿迈德</p>
-          <p>今天56家电影院放映443场</p>
-        </div>
-        <div class="btn_mall">购票</div>
-      </li>
-      <li>
-        <div class="pic_show"><img src="/images/movie_1.jpg" alt="" /></div>
-        <div class="info_list">
-          <h2>无名之辈</h2>
-          <p>
-            观众评<span class="grade">9.2</span>
-          </p>
-          <p>主演：陈建斌，任素汐，潘斌龙</p>
-          <p>今天55家电影院放映667场</p>
-        </div>
-        <div class="btn_mall">购票</div>
-      </li>
-      <li>
-        <div class="pic_show"><img src="/images/movie_2.jpg" alt="" /></div>
-        <div class="info_list">
-          <h2>毒液：致命守护者</h2>
-          <p>
-            观众评<span class="grade">9.3</span>
-          </p>
-          <p>主演：汤姆·哈迪，米歇尔·威廉姆斯，里兹·阿迈德</p>
-          <p>今天56家电影院放映443场</p>
-        </div>
-        <div class="btn_mall">购票</div>
-      </li>
-      <li>
-        <div class="pic_show"><img src="/images/movie_1.jpg" alt="" /></div>
-        <div class="info_list">
-          <h2>无名之辈</h2>
-          <p>
-            观众评<span class="grade">9.2</span>
-          </p>
-          <p>主演：陈建斌，任素汐，潘斌龙</p>
-          <p>今天55家电影院放映667场</p>
+          <p>主演：{{ data.star }}</p>
+          <p>{{ data.showInfo }}</p>
         </div>
         <div class="btn_mall">购票</div>
       </li>
@@ -118,9 +34,34 @@
 </template>
 
 <script>
+// https://m.maoyan.com/ajax/movieOnInfoList?token=
 export default {
   name: 'Nowplaying',
-  methods: {}
+  data () {
+    return {
+      datalist: null
+    }
+  },
+  methods: {
+    handleImg (data) {
+      for (let i = 0; i < data.movieList.length; i++) {
+        data.movieList[i].img = data.movieList[i].img.replace('/w.h', '') + '@1l_1e_1c_128w_180h'
+        // console.log(data.movieList[i].img)
+      }
+      return data
+    }
+  },
+  mounted () {
+    this.axios({
+      type: 'get',
+      url: '/ajax/movieOnInfoList?token='
+    }).then((res) => {
+      console.log(res.data)
+
+      this.datalist = this.handleImg(res.data)
+      console.log(this.datalist)
+    })
+  }
 }
 </script>
 
@@ -195,5 +136,4 @@ export default {
     }
   }
 }
-
 </style>
