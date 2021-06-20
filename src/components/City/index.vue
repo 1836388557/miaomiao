@@ -1,30 +1,41 @@
 <template>
   <div class="city_body">
-    <div class="city_list" ref="city_list">
-      <div class="city_hot" >
-        <h2>热门城市</h2>
-        <ul class="clearfix">
-          <li v-for="city in hotlist" :key="city.id">{{city.nm}}</li>
-        </ul>
-      </div>
-      <div class="city_sort" ref="city_sort">
-        <div v-for="letterCity in citylist" :key="letterCity.index">
-          <h2 >{{ letterCity.index }}</h2>
+
+        <div class="city_list" >
+          <Scroller ref="city_list">
+          <div>
+          <div class="city_hot">
+            <h2>热门城市</h2>
+            <ul class="clearfix">
+              <li v-for="city in hotlist" :key="city.id" @tap="handleToCity(city.nm,city.id)">{{ city.nm }}</li>
+            </ul>
+          </div>
+          <div class="city_sort" ref="city_sort">
+            <div v-for="letterCity in citylist" :key="letterCity.index">
+              <h2>{{ letterCity.index }}</h2>
+              <ul>
+                <li v-for="city in letterCity.list" :key="city.id" @tap="handleToCity(city.nm,city.id)">
+                  {{ city.nm }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        </Scroller>
+        </div>
+
+        <div class="city_index">
           <ul>
-            <li v-for="city in letterCity.list" :key="city.id">
-              {{ city.nm }}
+            <li
+              v-for="(letterCity, index) in citylist"
+              :key="letterCity.index"
+              @touchstart="handleToIndex(index)"
+            >
+              {{ letterCity.index }}
             </li>
           </ul>
         </div>
-      </div>
-    </div>
-    <div class="city_index">
-      <ul>
-        <li v-for="(letterCity,index) in citylist" :key="letterCity.index" @touchstart="handleToIndex(index)">
-          {{ letterCity.index }}
-        </li>
-      </ul>
-    </div>
+
   </div>
 </template>
 
@@ -39,7 +50,7 @@ export default {
     }
   },
   methods: {
-    handleCity (data) {
+    handleCityData (data) {
       var letterArr = []
       var hotArr = []
       for (let i = 0; i < data.length; i++) {
@@ -67,22 +78,46 @@ export default {
     },
     handleToIndex (index) {
       var h2 = this.$refs.city_sort.getElementsByTagName('h2')
-      this.$refs.city_list.scrollTop = h2[index].offsetTop
+      // this.$refs.city_list.scrollTop = h2[index].offsetTop
+      this.$refs.city_list.toScrollTop(-h2[index].offsetTop)
+    },
+    handleToCity (nm, id) {
+      this.$store.commit('city/CITY_INFO', { nm, id })
+      window.localStorage.setItem('nowCityNm', nm)
+      window.localStorage.setItem('nowCityId', id)
+      this.$router.push('/movie/nowplaying')
     }
   },
   mounted () {
-    this.axios({
-      url: '/maoyansh/myshow/ajax/config/maoyan-show-m-web.frontEnd.config.cities',
-      type: 'get'
-    }).then((res) => {
-      console.log(res.data.data)
-      var data = JSON.parse(res.data.data)
-      var citydata = this.handleCity(data)
-      this.citylist = citydata.newlist
-      this.hotlist = citydata.hotArr
-      console.log(this.citylist)
-      console.log(this.hotlist)
-    })
+    var allCity = window.localStorage.getItem('allCity')
+    var hotCity = window.localStorage.getItem('hotCity')
+
+    if (allCity && hotCity) {
+      this.citylist = JSON.parse(allCity)
+      this.hotlist = JSON.parse(hotCity)
+      this.$hiddenLoading()
+    } else {
+      this.axios({
+        url:
+          '/maoyansh/myshow/ajax/config/maoyan-show-m-web.frontEnd.config.cities',
+        method: 'get'
+      }).then((res) => {
+        console.log(res.data.data)
+        var data = JSON.parse(res.data.data)
+        var citydata = this.handleCityData(data)
+        this.citylist = citydata.newlist
+        this.hotlist = citydata.hotArr
+        console.log(this.citylist)
+        console.log(this.hotlist)
+        this.$hiddenLoading()
+
+        window.localStorage.setItem('allCity', JSON.stringify(this.citylist))
+        window.localStorage.setItem('hotCity', JSON.stringify(this.hotlist))
+      })
+    }
+  },
+  beforeMount () {
+    this.$showLoading()
   }
 }
 </script>

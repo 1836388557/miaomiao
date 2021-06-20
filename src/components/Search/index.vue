@@ -50,9 +50,10 @@ export default {
       console.log(newVal)
       this.cancelRequest()
       var that = this
+      var cityId = this.$store.state.city.id
       this.axios({
         type: 'get',
-        url: `/apollo/ajax/search?kw=${newVal}&cityId=10&stype=-1`,
+        url: `/apollo/ajax/search?kw=${newVal}&cityId=${cityId}&stype=-1`,
         cancelToken: new this.axios.CancelToken(function executor (c) {
           // eslint-disable-next-line no-undef
           that.source = c

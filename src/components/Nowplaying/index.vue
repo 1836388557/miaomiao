@@ -1,26 +1,14 @@
 <template>
-  <!-- <div class="movie_body">
-    <ul>
-      <li v-for="data in datalist" :key="data.index">
-        <div class="pic_show"><img :src="data.url" alt="" /></div>
-        <div class="info_list">
-          <h2>{{ data.name }}</h2>
-          <p>
-            观众评<span class="grade">{{ data.grade }}</span>
-          </p>
-          <p>主演：{{ data.actors }}</p>
-          <p>今天{{ data.home }}家电影院放映{{ data.c }}场</p>
-        </div>
-        <div class="btn_mall">购票</div>
-      </li>
-    </ul>
-  </div> -->
   <div class="movie_body">
-    <ul v-if="datalist">
-      <li v-for="data in datalist.movieList" :key="data.id">
+    <Scroller :handleToScroll="handleToScroll" :handleToTouchEnd="handleToTouchEnd" v-if="datalist">
+      <ul>
+      <li style="text-align:center;font-size:10px;color:red;display:block;border:none;transition:linear;" v-show="isPull" ref="topPull">{{pullDownMsg}}</li>
+      <li v-for="data in datalist.movieList" :key="data.id" @tap="handleToDetail" >
         <div class="pic_show"><img :src="data.img" alt="" /></div>
         <div class="info_list">
-          <h2>{{ data.nm }}<img v-if="data.version" src="@/assets/maxs.png"></h2>
+          <h2>
+            {{ data.nm }}<img v-if="data.version" src="@/assets/maxs.png" />
+          </h2>
           <p>
             观众评<span class="grade">{{ data.sc }}</span>
           </p>
@@ -30,37 +18,92 @@
         <div class="btn_mall">购票</div>
       </li>
     </ul>
+    </Scroller>
+
   </div>
 </template>
 
 <script>
-// https://m.maoyan.com/ajax/movieOnInfoList?token=
+
+//     __mta=251469497.1624161524515.1624161524515.1624161524515.1; ci=40%2C%E5%A4%A9%E6%B4%A5; ci=40%2C%E5%A4%A9%E6%B4%A5; ci=40%2C%E5%A4%A9%E6%B4%A5; _lxsdk_s=17a27875262-4c0-149-711%7C%7C33; Hm_lpvt_703e94591e87be68cc8da0da7cbd0be2=1624162042
+//     Hm_lpvt_703e94591e87be68cc8da0da7cbd0be2=1624162205; __mta=251469497.1624161524515.1624162042914.1624162205258.3; _lxsdk_s=17a27875262-4c0-149-711%7C%7C42; ci=59%2C%E6%88%90%E9%83%BD; ci=59%2C%E6%88%90%E9%83%BD; ci=59%2C%E6%88%90%E9%83%BD
 export default {
+
   name: 'Nowplaying',
   data () {
     return {
-      datalist: null
+      datalist: null,
+      pullDownMsg: '',
+      isPull: false,
+      preCityId: -1
+
     }
   },
   methods: {
     handleImg (data) {
       for (let i = 0; i < data.movieList.length; i++) {
-        data.movieList[i].img = data.movieList[i].img.replace('/w.h', '') + '@1l_1e_1c_128w_180h'
+        data.movieList[i].img =
+          data.movieList[i].img.replace('/w.h', '') + '@1l_1e_1c_128w_180h'
         // console.log(data.movieList[i].img)
       }
       return data
+    },
+    handleToDetail () {
+      console.log('handleToDetail')
+    },
+    handleToScroll (pos) {
+      if (pos.y > 10) {
+        this.isPull = true
+        this.pullDownMsg = '下拉更新'
+        this.$refs.topPull.style.height = pos.y + 'px'
+      }
+      if (pos.y > 40) {
+        this.$refs.topPull.style.height = 20 + 'px'
+        this.pullDownMsg = '正在为您更新内容...'
+      }
+    },
+    handleToTouchEnd (pos) {
+      if (pos.y > 40) {
+        this.isPull = true
+        this.axios({
+          method: 'get',
+          url: '/ajax/movieOnInfoList?token=&optimus_uuid=2B9F7D60D17A11EBAEEF5DD8B7FCF8D161DDB3E0AB464F98882820B19B239436&optimus_risk_level=71&optimus_code=10'
+        }).then((res) => {
+          console.log(res.data)
+          this.pullDownMsg = '更新完毕'
+          setTimeout(() => {
+            this.isPull = false
+            this.datalist = this.handleImg(res.data)
+            console.log(this.datalist)
+          }, 1000)
+        })
+      }
     }
   },
-  mounted () {
+  activated () {
+    var cityId = this.$store.state.city.id
+    if (this.preCityId === cityId) {
+      return
+    }
+    this.$showLoading()
+    var value = encodeURIComponent(window.localStorage.getItem('nowCityId')) + '%2C' + encodeURIComponent(window.localStorage.getItem('nowCityNm'))
+    document.cookie = `ci=${value};domain=localhost;path=/;expires=${new Date().setDate(7 + new Date().getDate())}`
+    console.log(document.cookie)
     this.axios({
-      type: 'get',
-      url: '/ajax/movieOnInfoList?token='
+      method: 'get',
+      url: '/ajax/movieOnInfoList?token=&optimus_uuid=2B9F7D60D17A11EBAEEF5DD8B7FCF8D161DDB3E0AB464F98882820B19B239436&optimus_risk_level=71&optimus_code=10'
+
     }).then((res) => {
       console.log(res.data)
 
       this.datalist = this.handleImg(res.data)
       console.log(this.datalist)
+      this.preCityId = cityId
+      this.$hiddenLoading()
     })
+  },
+  beforeMount () {
+    this.$showLoading()
   }
 }
 </script>

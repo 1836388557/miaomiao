@@ -1,7 +1,9 @@
 <template>
-  <div class="movie_body">
+  <div class="movie_body" ref="movie_body">
+    <Scroller :handleToScroll="handleToScroll" :handleToTouchEnd="handleToTouchEnd" v-if="datalist">
     <ul v-if="datalist">
-      <li v-for="data in datalist.coming" :key="data.id">
+      <li style="text-align:center;font-size:10px;color:red;display:block;border:none;transition:linear;" v-show="isPull" ref="topPull">{{pullDownMsg}}</li>
+      <li v-for="data in datalist.coming" :key="data.id" @tap="handleToDetail">
         <div class="pic_show"><img :src="data.img" /></div>
         <div class="info_list">
           <h2>{{data.nm}}<img v-if="data.version" src="@/assets/maxs.png"></h2>
@@ -12,16 +14,22 @@
         <div class="btn_pre">预售</div>
       </li>
     </ul>
+   </Scroller>
   </div>
 </template>
 
 <script>
 // https://m.maoyan.com/ajax/comingList?ci=10&token=&limit=10&optimus_uuid=9AB21B50C39111EB9BD35FB66045BAEE2943D17686244A79A25B62905721C15D&optimus_risk_level=71&optimus_code=10
+
 export default {
   name: 'Comingsoon',
   data () {
     return {
-      datalist: null
+      datalist: null,
+      pullDownMsg: '',
+      isPull: false,
+      preCityId: -1
+
     }
   },
   methods: {
@@ -30,18 +38,54 @@ export default {
         data.coming[i].img = data.coming[i].img.replace('/w.h', '') + '@1l_1e_1c_128w_180h'
       }
       return data
+    },
+    handleToDetail () {
+      console.log('handleToDetail')
+    },
+    handleToScroll (pos) {
+      if (pos.y > 10) {
+        this.isPull = true
+        this.pullDownMsg = '下拉更新'
+        this.$refs.topPull.style.height = pos.y + 'px'
+      }
+      if (pos.y > 40) {
+        this.$refs.topPull.style.height = 20 + 'px'
+        this.pullDownMsg = '正在为您更新内容...'
+      }
+    },
+    handleToTouchEnd (pos) {
+      this.isPull = false
+      if (pos.y > 40) {
+        this.isPull = true
+        this.axios({
+          type: 'get',
+          url: '/ajax/comingList?ci=10&token='
+        }).then((res) => {
+          console.log(res.data)
+          this.pullDownMsg = '更新完毕'
+          setTimeout(() => {
+            this.isPull = false
+            this.datalist = this.handleImg(res.data)
+            console.log(this.datalist)
+          }, 1000)
+        })
+      }
     }
   },
-  mounted () {
+  activated () {
     this.axios({
-      type: 'get',
-      url: '/ajax/comingList?ci=10&token='
+      method: 'get',
+      url: `/ajax/comingList?ci=${this.$store.state.city.id}&token=`
     }).then((res) => {
       console.log(res.data)
 
       this.datalist = this.handleImg(res.data)
       console.log(this.datalist)
+      this.$hiddenLoading()
     })
+  },
+  beforeMount () {
+    this.$showLoading()
   }
 }
 </script>

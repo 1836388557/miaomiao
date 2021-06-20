@@ -13,7 +13,7 @@
           特色 <i class="iconfont icon-lower-triangle"></i>
         </div>
       </div>
-      <CiList/>
+      <CiList />
     </div>
     <TabBar />
   </div>
@@ -36,8 +36,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#content .cinema_menu{ width: 100%; height: 45px; border-bottom:1px solid #e6e6e6; display: flex; justify-content:space-around; align-items:center; background:white;}
-.cinema_menu>div{
-  line-height:48px;
+#content .cinema_menu {
+  width: 100%;
+  height: 45px;
+  border-bottom: 1px solid #e6e6e6;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: white;
+  position: fixed;
+  top: 50px;
+  z-index: 99;
+}
+.cinema_menu > div {
+  line-height: 48px;
 }
 </style>

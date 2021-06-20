@@ -1,6 +1,7 @@
 <template>
   <div id="main">
     <Header title="喵喵电影" />
+
     <div id="content">
       <div class="movie_menu">
         <router-link
@@ -9,7 +10,8 @@
           to="/movie/city"
           active-class="c_active"
         >
-          <span>大连</span><i class="iconfont icon-lower-triangle"></i>
+          <span>{{ $store.state.city.nm }}</span
+          ><i class="iconfont icon-lower-triangle"></i>
         </router-link>
         <div class="hot_switch">
           <router-link
@@ -48,13 +50,56 @@
 <script>
 import Header from '@/components/Header'
 import TabBar from '@/components/TabBar'
+import { MessageBox } from '@/plugins/messageBox'
 export default {
   name: 'Movie',
   methods: {},
   components: {
     Header,
     TabBar
+  },
+  mounted () {
+    this.axios({
+      method: 'get',
+      url: 'https://www.googleapis.com/',
+      timeout: 1000
+    }).then((res) => {
+      console.log('定位')
+      if (res.data) {
+        var nm = res.data.city.nm
+        var id = res.data.city.id
+        // eslint-disable-next-line eqeqeq
+        if (this.$store.state.city.id == id) {
+          return
+        }
+        MessageBox({
+          title: '定位',
+          content: nm,
+          cancel: '取消',
+          ok: '切换定位',
+          handleOk: function () {
+            window.localStorage.setItem('nowCityNm', nm)
+            window.localStorage.setItem('nowCityId', id)
+            window.location.reload()
+          }
+        })
+      }
+    }).catch(error => {
+      console.log('定位失败')
+      console.log(error)
+      MessageBox({
+        title: '定位',
+        content: '赣州',
+        cancel: '取消',
+        ok: '切换定位',
+        handleOk: function () {
+          window.localStorage.setItem('nowCityNm', '赣州')
+          window.localStorage.setItem('nowCityId', '217')
+        }
+      })
+    })
   }
+
 }
 </script>
 
@@ -65,7 +110,6 @@ export default {
 }
 .c_active {
   color: #ef4238;
-
 }
 #content .movie_menu {
   width: 100%;
