@@ -1,20 +1,79 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <link rel="stylesheet" href="<%= BASE_URL %>css/common.css">
-    <link rel="stylesheet" href="<%= BASE_URL %>css/cinema.css">
-    <link rel="stylesheet" href="<%= BASE_URL %>css/iconfont/iconfont.css">
-    <title><%= htmlWebpackPlugin.options.title %></title>
-  </head>
-  <body>
-    <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+  <link rel="stylesheet" href="<%= BASE_URL %>css/common.css">
+  <link rel="stylesheet" href="<%= BASE_URL %>css/cinema.css">
+  <link rel="stylesheet" href="<%= BASE_URL %>css/iconfont/iconfont.css">
+  <title><%= htmlWebpackPlugin.options.title %></title>
+  <style>
+    #app {
+      display: flex;
+      height: 100%;
+    }
+
+    #app>div {
+      margin: auto;
+    }
+
+    .container {
+      width: 100px;
+      height: 100px;
+      border-radius: 10px;
+      background-color: rgba(218, 211, 211, 0.4);
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .loading {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 4px solid #fff;
+      margin: 10px auto;
+      border-right-color: rgb(224, 77, 57);
+      animation: loading 2s linear infinite;
+    }
+
+    @keyframes loading {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .title {
+      text-align: center;
+      font-size: 8px;
+      color: rgb(223, 122, 122);
+    }
+  </style>
+</head>
+
+<body>
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+      Please enable it to continue.</strong>
+  </noscript>
+  <div id="app">
+    <div>
+      <div class="container" v-show="isShow">
+        <div class="loading"></div>
+        <p class="title">喵喵正在加载中...</p>
+      </div>
+    </div>
+
+  </div>
+  <!-- built files will be auto injected -->
+</body>
+
 </html>

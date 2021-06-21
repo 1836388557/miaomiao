@@ -3,7 +3,7 @@
     <Scroller :handleToScroll="handleToScroll" :handleToTouchEnd="handleToTouchEnd" v-if="datalist">
       <ul>
       <li style="text-align:center;font-size:10px;color:red;display:block;border:none;transition:linear;" v-show="isPull" ref="topPull">{{pullDownMsg}}</li>
-      <li v-for="data in datalist.movieList" :key="data.id" @tap="handleToDetail" >
+      <li v-for="data in datalist.movieList" :key="data.id" @tap="handleToDetail(data.id)" >
         <div class="pic_show"><img :src="data.img" alt="" /></div>
         <div class="info_list">
           <h2>
@@ -25,8 +25,6 @@
 
 <script>
 
-//     __mta=251469497.1624161524515.1624161524515.1624161524515.1; ci=40%2C%E5%A4%A9%E6%B4%A5; ci=40%2C%E5%A4%A9%E6%B4%A5; ci=40%2C%E5%A4%A9%E6%B4%A5; _lxsdk_s=17a27875262-4c0-149-711%7C%7C33; Hm_lpvt_703e94591e87be68cc8da0da7cbd0be2=1624162042
-//     Hm_lpvt_703e94591e87be68cc8da0da7cbd0be2=1624162205; __mta=251469497.1624161524515.1624162042914.1624162205258.3; _lxsdk_s=17a27875262-4c0-149-711%7C%7C42; ci=59%2C%E6%88%90%E9%83%BD; ci=59%2C%E6%88%90%E9%83%BD; ci=59%2C%E6%88%90%E9%83%BD
 export default {
 
   name: 'Nowplaying',
@@ -48,8 +46,9 @@ export default {
       }
       return data
     },
-    handleToDetail () {
+    handleToDetail (id) {
       console.log('handleToDetail')
+      this.$router.push({ name: 'detail', params: { id } })
     },
     handleToScroll (pos) {
       if (pos.y > 10) {
@@ -87,7 +86,9 @@ export default {
     }
     this.$showLoading()
     var value = encodeURIComponent(window.localStorage.getItem('nowCityId')) + '%2C' + encodeURIComponent(window.localStorage.getItem('nowCityNm'))
-    document.cookie = `ci=${value};domain=localhost;path=/;expires=${new Date().setDate(7 + new Date().getDate())}`
+    console.log(value)
+    document.cookie = `selectci=true;path=/;expires=${new Date().setDate(7 + new Date().getDate())}`
+    document.cookie = `ci=${value};path=/;expires=${new Date().setDate(7 + new Date().getDate())}`
     console.log(document.cookie)
     this.axios({
       method: 'get',

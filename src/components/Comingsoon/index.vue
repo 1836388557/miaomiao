@@ -3,7 +3,7 @@
     <Scroller :handleToScroll="handleToScroll" :handleToTouchEnd="handleToTouchEnd" v-if="datalist">
     <ul v-if="datalist">
       <li style="text-align:center;font-size:10px;color:red;display:block;border:none;transition:linear;" v-show="isPull" ref="topPull">{{pullDownMsg}}</li>
-      <li v-for="data in datalist.coming" :key="data.id" @tap="handleToDetail">
+      <li v-for="data in datalist.coming" :key="data.id" @tap="handleToDetail(data.id)">
         <div class="pic_show"><img :src="data.img" /></div>
         <div class="info_list">
           <h2>{{data.nm}}<img v-if="data.version" src="@/assets/maxs.png"></h2>
@@ -39,8 +39,9 @@ export default {
       }
       return data
     },
-    handleToDetail () {
+    handleToDetail (id) {
       console.log('handleToDetail')
+      this.$router.push({ name: 'detail', params: { id } })
     },
     handleToScroll (pos) {
       if (pos.y > 10) {

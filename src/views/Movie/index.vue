@@ -87,16 +87,16 @@ export default {
     }).catch(error => {
       console.log('定位失败')
       console.log(error)
-      MessageBox({
-        title: '定位',
-        content: '赣州',
-        cancel: '取消',
-        ok: '切换定位',
-        handleOk: function () {
-          window.localStorage.setItem('nowCityNm', '赣州')
-          window.localStorage.setItem('nowCityId', '217')
-        }
-      })
+      // MessageBox({
+      //   title: '定位',
+      //   content: '赣州',
+      //   cancel: '取消',
+      //   ok: '切换定位',
+      //   handleOk: function () {
+      //     window.localStorage.setItem('nowCityNm', '赣州')
+      //     window.localStorage.setItem('nowCityId', '217')
+      //   }
+      // })
     })
   }
 
